@@ -7,7 +7,7 @@
 # To test the docker image a command like this can be used:
 #docker run --rm -p 3123:3000 --name iconify-api -v $(realpath "../iconify-cache"):/data/iconify-api/cache -v $(realpath "../iconify-config"):/data/iconify-api/src/config iconify/api:latest
 #docker run --rm -p 3123:3000 --name iconify-api -v /absolute/path/iconify-cache:/data/iconify-api/cache -v /absolute/path/iconify-config:/data/iconify-api/src/config iconify/api:latest
-DOCKER_REPO=iconify/api
+DOCKER_REPO=registry.dev.niuchart.com:4430/niuchart/iconify-api
 ICONIFY_API_REPO=$(realpath "./")
 BUILD_SOURCE=$(realpath "./")
 SHARED_DIR=$BUILD_SOURCE/../shared
@@ -56,3 +56,5 @@ time docker build --rm=false \
     --tag ${DOCKER_REPO}:latest --tag ${DOCKER_REPO}:${ICONIFY_API_VERSION} $BUILD_SOURCE
 
 rm -fR $BUILD_SOURCE/tmp
+
+docker push ${DOCKER_REPO}:${ICONIFY_API_VERSION}

@@ -1,5 +1,5 @@
 {
-  "prefix": "nx-erp",
+  "prefix": "niuchart",
   "lastModified": 1673023160,
   "icons": {
     "pc": {
@@ -503,7 +503,7 @@
   "width": 1024,
   "height": 1024,
   "info": {
-    "name": "nx-erp",
+    "name": "niuchart",
     "samples": [
       "pc",
       "dark",
