@@ -15,6 +15,7 @@ import { generateUpdateResponse } from './responses/update.js';
 import { initVersionResponse, versionResponse } from './responses/version.js';
 import { generateIconsStyleResponse } from './responses/css.js';
 import { handleJSONResponse } from './helpers/send.js';
+import { errorText } from './helpers/errors.js';
 
 /**
  * Start HTTP server
@@ -22,7 +23,9 @@ import { handleJSONResponse } from './helpers/send.js';
 export async function startHTTPServer() {
 	// Create HTP server
 	const server = fastify({
-		caseSensitive: true,
+		routerOptions: {
+			caseSensitive: true,
+		},
 	});
 
 	// Support `application/x-www-form-urlencoded`
@@ -82,7 +85,7 @@ export async function startHTTPServer() {
 				generateSVGResponse(name.prefix, name.name, req.query, res);
 			});
 		} else {
-			res.send(404);
+			res.code(404).send(errorText(404));
 		}
 	});
 
@@ -178,7 +181,7 @@ export async function startHTTPServer() {
 
 	// Options
 	server.options('/*', (req, res) => {
-		res.send(200);
+		res.code(204).header('Content-Length', '0').send();
 	});
 
 	// Robots
@@ -198,21 +201,21 @@ export async function startHTTPServer() {
 
 	// Redirect
 	server.get('/', (req, res) => {
-		res.redirect(301, appConfig.redirectIndex);
+		res.redirect(appConfig.redirectIndex, 301);
 	});
 
 	// Error handling
-	server.setDefaultRoute((req, res) => {
+	server.setNotFoundHandler((req, res) => {
 		res.statusCode = 404;
 		console.log('404:', req.url);
 
 		// Need to set custom headers because hooks don't work here
 		for (let i = 0; i < headers.length; i++) {
 			const header = headers[i];
-			res.setHeader(header.key, header.value);
+			res.header(header.key, header.value);
 		}
 
-		res.end();
+		res.send();
 	});
 
 	// Start it

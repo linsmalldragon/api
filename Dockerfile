@@ -1,7 +1,7 @@
 ARG ARCH=amd64
-ARG NODE_VERSION=18
+ARG NODE_VERSION=22
 ARG OS=bullseye-slim
-ARG ICONIFY_API_VERSION=3.0.0
+ARG ICONIFY_API_VERSION=3.2.0
 ARG SRC_PATH=./
 
 #### Stage BASE ########################################################################################################
@@ -53,8 +53,8 @@ COPY ${SRC_PATH}icons/ /data/iconify-api/icons/
 # Build API
 RUN npm run build
 
-#### Stage RELEASE #####################################################################################################
-FROM iconify-api-install AS RELEASE
+#### Stage release #####################################################################################################
+FROM iconify-api-install AS release
 ARG BUILD_DATE
 ARG BUILD_VERSION
 ARG BUILD_REF
